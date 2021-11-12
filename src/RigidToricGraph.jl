@@ -1,5 +1,6 @@
 module RigidToricGraph
 
+using Oscar.Polymake
 # Write your package code here.
 
 
@@ -7,6 +8,7 @@ function get_threefaces(HD, bad_flag)
     threefaceics = @Polymake.convert_to Array{Int} Polymake.graph.nodes_of_rank(HD, 3)
     threefaceics = Polymake.to_one_based_indexing(threefaceics)
     F = @Polymake.convert_to Array{Set{Int}} HD.FACES
+    F = Polymake.to_one_based_indexing(F)
     threefaces = []
     for l in threefaceics
         tf = F[l]
@@ -23,6 +25,7 @@ function get_twofaces(HD)
     twofaceics = @Polymake.convert_to Array{Int} Polymake.graph.nodes_of_rank(HD, 2)
     twofaceics = Polymake.to_one_based_indexing(twofaceics)
     F = @Polymake.convert_to Array{Set{Int}} HD.FACES
+    F = Polymake.to_one_based_indexing(F)
     twofaces = []
     for l in twofaceics
         tf = F[l]
