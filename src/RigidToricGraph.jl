@@ -1,5 +1,6 @@
 module RigidToricGraph
 
+using Oscar
 using Oscar.Polymake
 # Write your package code here.
 
@@ -35,7 +36,35 @@ function get_twofaces(HD)
 end
 
 
-export get_threefaces,
+function crosscut_skeleton(Cdual, HD, Defdegree)
+    skeleton = []
+    good_faces = get_threefaces(HD, false)
+    append!(good_faces, get_twofaces(HD))
+    for gtf in good_faces
+        is_good = true
+        for r in gtf
+            prod = dot(rays(Cdual)[r], Defdegree)
+            if prod < 1
+                is_good = false
+                break
+            end
+        end
+        if length(gtf) == 2
+            if findfirst(s->issubset(gtf, s), skeleton) != nothing
+                is_good = false
+            end
+        end
+        if is_good
+            push!(skeleton, gtf)
+        end
+    end
+    return skeleton
+end
+
+
+export 
+    crosscut_skeleton,
+    get_threefaces,
     get_twofaces
 
 end
